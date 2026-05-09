@@ -1,0 +1,22 @@
+# Ignore system files
+.DS_Store
+*pycache*
+**/scratch
+**/tmp
+.idea
+*.key
+*.code-workspace
+*.vscode
+
+# Ignore large output files
+paper_figures/data/*
+
+# Ignore patient data
+patients/Zhang_et_al/
+patients/Bruchovsky_et_al/
+
+# All plotting files
+paper_figures/figures/
+
+# Miscellaneous
+**/.ipynb_checkpoints
