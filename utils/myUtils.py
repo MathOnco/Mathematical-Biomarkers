@@ -266,3 +266,99 @@ def printTable(myDict, colList=None, printHeaderB=True, colSize=None, **kwargs):
     if printHeaderB: myList.insert(1, ['-' * i for i in colSize]) # Seperating line
     for item in myList: print(formatStr.format(*item))
     if kwargs.get('getColSizeB',False): return colSize
+
+
+# ====================================================================================
+# Biomarker functions previously defined only inside the figure notebooks.
+# Moved here so that the published quantities can be reproduced from utils/ alone.
+# See CORRECTIONS.md items 2, 4 and 7.
+# ====================================================================================
+
+AT_SCORE_POLE_DEFAULT = 0.7196   # turnover at which calc_delta_benefit changes sign
+                                 # for cost = 0.1, K = 2.5, fR = 1e-5, n0 = 1
+
+
+def at_score_pole(cost, kappa=0.2):
+    """Turnover (d/rS) at which calc_delta_benefit ceases to be an increasing
+    function of turnover. The resistant net growth rate rR*(1-kappa) - dR passes
+    through zero at d/rS = (1-cost)*(1-kappa); calc_delta_benefit is only a
+    consistently ordered quantity strictly below this value."""
+    return (1.0 - cost) * (1.0 - kappa)
+
+
+def calc_threshold_benefit(ave_n, **kwargs):
+    """AT Score for a protocol whose average tumour burden is ave_n."""
+    params = kwargs
+    return calc_delta_benefit(kappa=(ave_n / params['K']), **params)
+
+
+def predict_at_threshold_ttp_simp(n_crit, **kwargs):
+    """Threshold-AT TTP with no overshoot correction (kappa = n_crit / K)."""
+    params = kwargs
+    benefit = calc_delta_benefit(kappa=n_crit / params['K'], **params)
+    return predict_ct_ttp(**params) * (1 + benefit)
+
+
+def fraction_time_below_threshold(dataDf, threshold, time_col="Time", value_col="PSA"):
+    """Time-weighted fraction of the record spent below `threshold`, with linear
+    interpolation across crossings."""
+    tmp = (dataDf[[time_col, value_col]].dropna().sort_values(time_col)
+           .groupby(time_col, as_index=False)[value_col].mean())
+    if len(tmp) < 2:
+        return np.nan
+    t = tmp[time_col].to_numpy(dtype=float)
+    y = tmp[value_col].to_numpy(dtype=float)
+    dt = np.diff(t)
+    valid = dt > 0
+    if not np.any(valid):
+        return np.nan
+    y0, y1, dt = y[:-1][valid], y[1:][valid], dt[valid]
+    all_under = (y0 <= threshold) & (y1 <= threshold)
+    all_over = (y0 > threshold) & (y1 > threshold)
+    crossing = ~(all_under | all_over)
+    under_time = np.sum(dt[all_under])
+    if np.any(crossing):
+        alpha = np.clip((threshold - y0[crossing]) / (y1[crossing] - y0[crossing]), 0.0, 1.0)
+        under_time += np.sum(np.where(y0[crossing] <= threshold,
+                                      alpha * dt[crossing], (1.0 - alpha) * dt[crossing]))
+    return under_time / np.sum(dt)
+
+
+def fraction_time_on_treatment(dataDf, t_end=None, drug_col="DrugConcentration",
+                               time_col="Time"):
+    """Time-weighted fraction of follow-up spent on treatment, from the clinical
+    record (step-hold on the preceding reading). 1 - this is the drug-holiday
+    fraction, the primary endpoint for the AT Score (CORRECTIONS.md item 7)."""
+    d = dataDf.dropna(subset=[drug_col]).sort_values(time_col)
+    if t_end is not None:
+        d = d[d[time_col] <= t_end]
+    t = d[time_col].to_numpy(dtype=float)
+    g = d[drug_col].to_numpy(dtype=float)
+    if len(t) < 2:
+        return np.nan
+    dt = np.diff(t)
+    return float(np.sum(dt * g[:-1]) / np.sum(dt))
+
+
+def predict_clinical_ttp(patientId, data_path, loader=LoadPatientData,
+                         psa_threshold_ng_per_mL=2.5, **kwargs):
+    """eTTP as reported in eTable S8.
+
+    NOTE: this is NOT a function of the parameter vector alone -- it reads the
+    patient's clinical record, including the raw PSA at t0. It interpolates
+    between the CT and threshold-AT predictions using the fraction of follow-up
+    the patient actually spent below the clinical PSA threshold.
+    """
+    param_set = kwargs
+    dataDf = loader(patientId, data_path)
+    dataDf = dataDf[dataDf['PSA'].isna() == False]
+    ttp = dataDf[dataDf['PSA'] < 1.2 * dataDf['PSA'].iloc[0]]['Time'].iloc[-1]
+    dataDf = dataDf[dataDf['Time'] <= ttp]
+
+    threshold = psa_threshold_ng_per_mL / dataDf['PSA_raw'].iloc[0]
+    N_star = dataDf[dataDf['PSA'] >= threshold]['PSA'].mean()
+
+    at_ttp = predict_at_threshold_ttp_simp(param_set['n0'] * N_star, **param_set)
+    ct_ttp = predict_ct_ttp(**param_set)
+    fraction_under = fraction_time_below_threshold(dataDf, threshold)
+    return ct_ttp + (1 - fraction_under) * (at_ttp - ct_ttp)

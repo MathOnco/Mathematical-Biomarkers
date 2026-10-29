@@ -18,3 +18,9 @@ For the susceptible population, this growth rate is also modified by the drug co
 Finally, both species have a natural death rate, of $d_{S}$ and $d_{R}$ respectively.
 
 This model is implemented in the `LotkaVolterraModel` class, which inherits from `ODEModel`. This parent class sets parameters such as error tolerances for the solver, and then solves the ODE model for each treatment period sequentially.
+
+## Corrections
+
+See [CORRECTIONS.md](CORRECTIONS.md) for the corrected fitting protocol, the biomarker
+functions moved into `utils/`, and the endpoint analysis. Reproduce with
+`python patients/first_cycle_fitting.py` then `python analysis/holiday_endpoint.py`.
