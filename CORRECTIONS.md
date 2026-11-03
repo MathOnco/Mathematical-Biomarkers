@@ -126,3 +126,14 @@ The optimiser (`method='least_squares'`, TRF — not Levenberg–Marquardt as th
 states), the solver tolerances, `max_nfev = 200`, the raw-residual objective, and the
 Lotka–Volterra model itself are unchanged, so the corrected fits remain directly comparable
 to the published ones.
+
+## Addendum: landmark re-analysis, holiday fraction vs TTP, Zhang fit window
+
+* `analysis/holiday_fraction_utils.py`, `analysis/landmark_holiday_analysis.py`, `paper_figures/SI_Landmark_and_Holiday_Fraction.ipynb`
+  (rebuilt by `paper_figures/build_landmark_holiday_notebook.py`).
+* **[C5] Zhang fit window.** 13 of 17 Zhang files begin with pre-treatment, off-drug rows. `TruncateDataframe` (used by the notebooks and by
+  `patients/first_cycle_fitting.py`) cuts at the first off -> on switch, which for these patients is the start of abiraterone, so the fitted
+  'first cycle' is the pre-treatment segment (9 patients end up with < 3 points). `analysis/landmark_holiday_analysis.zhang_window(mode='treated')`
+  fits the first treated cycle instead. The corrected-branch Zhang CSV (`Zhang_first_cycle_corrected.csv`) still uses the published window.
+* Castrate-sensitive: subtracting the first-cycle length from the progression times does not change the (null) result.
+* Holiday fraction vs TTP is not significant for raw TTP in any cohort; the castrate-sensitive nominal signal is explained by cycle length.

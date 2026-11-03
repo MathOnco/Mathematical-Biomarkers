@@ -1,0 +1,25 @@
+window,priors,subset,N,endpoint,rho,p
+published,"Zhang-style (fR 1e-2, cost 0.01)",all with TTP>0,15,TTP,0.37118623463057027,0.17315218754000458
+published,"Zhang-style (fR 1e-2, cost 0.01)",all with TTP>0,15,whole-record off fraction,0.028829998806257882,0.9187635043846015
+published,"Zhang-style (fR 1e-2, cost 0.01)",all with TTP>0,15,first-cycle off fraction (same window as fit),-0.381997484182917,0.15999586943816507
+published,"Zhang-style (fR 1e-2, cost 0.01)",below AT-score pole,14,TTP,0.47558491355512394,0.08564938334689477
+published,"Zhang-style (fR 1e-2, cost 0.01)",below AT-score pole,14,whole-record off fraction,-0.04666954759185795,0.8741214886924906
+published,"Zhang-style (fR 1e-2, cost 0.01)",below AT-score pole,14,first-cycle off fraction (same window as fit),-0.33113155196127786,0.24749128861075578
+published,"Bruchovsky-style (fR 1e-5, cost 0.1)",all with TTP>0,15,TTP,0.014414999403128941,0.959335325734348
+published,"Bruchovsky-style (fR 1e-5, cost 0.1)",all with TTP>0,15,whole-record off fraction,0.036037498507822355,0.8985413019590319
+published,"Bruchovsky-style (fR 1e-5, cost 0.1)",all with TTP>0,15,first-cycle off fraction (same window as fit),-0.08648999641877367,0.7592327994603398
+published,"Bruchovsky-style (fR 1e-5, cost 0.1)",below AT-score pole,14,TTP,0.08000493872889936,0.7857168932076994
+published,"Bruchovsky-style (fR 1e-5, cost 0.1)",below AT-score pole,14,whole-record off fraction,-0.002222359409136093,0.9939840531509305
+published,"Bruchovsky-style (fR 1e-5, cost 0.1)",below AT-score pole,14,first-cycle off fraction (same window as fit),0.002222359409136093,0.9939840531509305
+treated,"Zhang-style (fR 1e-2, cost 0.01)",all with TTP>0,15,TTP,0.08928571428571427,0.7516725173502768
+treated,"Zhang-style (fR 1e-2, cost 0.01)",all with TTP>0,15,whole-record off fraction,0.557142857142857,0.030961086755812144
+treated,"Zhang-style (fR 1e-2, cost 0.01)",all with TTP>0,15,first-cycle off fraction (same window as fit),0.39642857142857135,0.1434945314423537
+treated,"Zhang-style (fR 1e-2, cost 0.01)",below AT-score pole,13,TTP,0.3516483516483516,0.23869970534203375
+treated,"Zhang-style (fR 1e-2, cost 0.01)",below AT-score pole,13,whole-record off fraction,0.7197802197802198,0.005536115775787642
+treated,"Zhang-style (fR 1e-2, cost 0.01)",below AT-score pole,13,first-cycle off fraction (same window as fit),0.7967032967032966,0.0011136526522685876
+treated,"Bruchovsky-style (fR 1e-5, cost 0.1)",all with TTP>0,15,TTP,-0.2821428571428571,0.3082844568200555
+treated,"Bruchovsky-style (fR 1e-5, cost 0.1)",all with TTP>0,15,whole-record off fraction,0.19999999999999998,0.47481396452216845
+treated,"Bruchovsky-style (fR 1e-5, cost 0.1)",all with TTP>0,15,first-cycle off fraction (same window as fit),0.1928571428571428,0.49104870160522307
+treated,"Bruchovsky-style (fR 1e-5, cost 0.1)",below AT-score pole,12,TTP,-0.04195804195804196,0.8969858708195542
+treated,"Bruchovsky-style (fR 1e-5, cost 0.1)",below AT-score pole,12,whole-record off fraction,0.6993006993006995,0.011374198642690932
+treated,"Bruchovsky-style (fR 1e-5, cost 0.1)",below AT-score pole,12,first-cycle off fraction (same window as fit),0.9300699300699302,1.1702227928659685e-05
