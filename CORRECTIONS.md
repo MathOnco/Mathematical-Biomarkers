@@ -137,3 +137,10 @@ to the published ones.
   fits the first treated cycle instead. The corrected-branch Zhang CSV (`Zhang_first_cycle_corrected.csv`) still uses the published window.
 * Castrate-sensitive: subtracting the first-cycle length from the progression times does not change the (null) result.
 * Holiday fraction vs TTP is not significant for raw TTP in any cohort; the castrate-sensitive nominal signal is explained by cycle length.
+
+### Effect of the Zhang fit window on the published statistics (`analysis/zhang_window_effect.py`)
+`analysis/zhang_published_pipeline.py` reproduces the manuscript's Zhang statistics exactly from the published fits
+(N = 13: Spearman 0.764, P = .0024; Cox HR 0.41, 0.16-1.07, P = .068; OS log-rank AT score P = .037, eTTP P = .029) and refitting the published window reproduces the published
+CSV to 1e-16. Refitting the first TREATED cycle with otherwise identical settings gives N = 11, Spearman 0.38 (P = .25), Cox HR 0.97 (0.55-1.72), P = .93,
+OS log-rank AT score P = .135 (eTTP .048). On the 10 patients common to both analyses the Spearman falls from 0.83 to 0.41 (P .003 -> .24), so the change is due to the fits, not the patient set.
+Standard-metric benchmarks use relPSA_Indi (relative PSA), not raw PSA, in the notebook; raw PSA gives a nadir log-rank P of .35 rather than > .5.
