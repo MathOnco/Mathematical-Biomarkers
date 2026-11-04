@@ -144,3 +144,10 @@ to the published ones.
 CSV to 1e-16. Refitting the first TREATED cycle with otherwise identical settings gives N = 11, Spearman 0.38 (P = .25), Cox HR 0.97 (0.55-1.72), P = .93,
 OS log-rank AT score P = .135 (eTTP .048). On the 10 patients common to both analyses the Spearman falls from 0.83 to 0.41 (P .003 -> .24), so the change is due to the fits, not the patient set.
 Standard-metric benchmarks use relPSA_Indi (relative PSA), not raw PSA, in the notebook; raw PSA gives a nadir log-rank P of .35 rather than > .5.
+
+### Decision: the Zhang fit window is NOT changed
+The Zhang cohort keeps the published first-cycle window (`TruncateDataframe` from the first record; `patients/first_cycle_fitting.py` and
+`Zhang_first_cycle_corrected.csv` are unchanged in this respect). The treated-cycle refits in `analysis/landmark_holiday_analysis.py`
+(`zhang_window(mode='treated')`, `zhang_window_sensitivity`) and `analysis/zhang_window_effect.py` are sensitivity analyses only; they are not used by any
+default fitting path or table. Observation [C5] above (13/17 files start off drug, so the published window is the pre-treatment segment for them) is kept
+as a documented property of the published analysis, not as a correction that has been applied.
